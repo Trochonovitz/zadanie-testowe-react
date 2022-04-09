@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Table } from "Table/Table";
 import { Wrapper, StyledForm } from "./Form.styles";
 
-export const Form = () => {
+export const Form = ({ categories, items, setItems }) => {
   const [informations, setInformations] = useState({
     id: "",
     name: "",
@@ -10,29 +9,16 @@ export const Form = () => {
     price: "",
     category: "",
   });
-
-  const categories = [
-    "Procesor",
-    "Karta grafiki",
-    "Pamięć RAM",
-    "Peryferia",
-    "Oprogramowanie",
-  ];
-  const [addCategoryFlag, setCategoryFlag] = useState(false);
-
-  const handleInputValue = (element) => {
+  const handleInputValue = (event) => {
     setInformations({
       ...informations,
-      [element.target.id]: element.target.value,
+      [event.target.id]: event.target.value,
     });
-  };
-  const handleCategory = (element) => {
-    setInformations({ ...informations, category: element.target.textContent });
   };
   const handleOnSubmit = async (event) => {
     event.preventDefault();
     const newItem = {
-      id: Math.floor(Math.random() * 1000),
+      id: `${Math.floor(Math.random() * 1000)}`,
       name: informations.name,
       description: informations.description,
       price: informations.price,
@@ -40,13 +26,14 @@ export const Form = () => {
     };
 
     try {
-      await fetch("http://localhost:3001/add", {
+      await fetch("http://localhost:3001/addItem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newItem),
       });
+      setItems([newItem, ...items]);
     } catch (error) {
       console.log(error);
     }
@@ -78,25 +65,20 @@ export const Form = () => {
           onChange={(event) => handleInputValue(event)}
         />
         <label htmlFor="category">Wybierz kategorię</label>
-        <select id="category">
-          <option disabled selected>
+        <select
+          id="category"
+          defaultValue="DEFAULT"
+          onChange={(event) => handleInputValue(event)}
+        >
+          <option disabled value="DEFAULT">
             Wybierz kategorię!
           </option>
-          {categories.map((category) => (
-            <option onClick={(event) => handleCategory(event)}>
-              {category}
-            </option>
+          {categories.map(({ category }, index) => (
+            <option key={index}>{category}</option>
           ))}
         </select>
         <button type="submit">submit</button>
       </StyledForm>
-
-      <Table categories={categories} />
-
-      <button onClick={() => setCategoryFlag(!addCategoryFlag)}>
-        dodaj kategorię
-      </button>
-      {addCategoryFlag && <input placeholder="Dodaj kategorię" />}
     </Wrapper>
   );
 };
