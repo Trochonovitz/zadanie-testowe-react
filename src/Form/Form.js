@@ -87,6 +87,7 @@ export const Form = ({
       <Input
         placeholder="Cena"
         id="price"
+        type="number"
         value={informations.price}
         onChange={(event) => handleInputValue(event)}
       />
