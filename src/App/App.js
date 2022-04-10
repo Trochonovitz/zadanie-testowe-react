@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "Form/Form";
+import React, { useState, useEffect, createContext } from "react";
+import { AddItem } from "AddItem/AddItem";
 import { Table } from "Table/Table";
 import { AddCategory } from "AddCategory/AddCategory";
 import { Wrapper } from "./App.styles";
+
+export const ItemsCategoriesContext = createContext({
+  items: [],
+  catetegories: [],
+  setItems: () => {},
+  setCategories: () => {},
+});
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -28,9 +35,13 @@ const App = () => {
 
   return (
     <Wrapper>
-      <Form categories={categories} items={items} setItems={setItems} />
-      <Table categories={categories} items={items} setItems={setItems} />
-      <AddCategory categories={categories} setCategories={setCategories} />
+      <ItemsCategoriesContext.Provider
+        value={{ items, categories, setItems, setCategories }}
+      >
+        <AddItem />
+        <Table />
+        <AddCategory />
+      </ItemsCategoriesContext.Provider>
     </Wrapper>
   );
 };
