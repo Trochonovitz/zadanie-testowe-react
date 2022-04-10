@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
+import { Global } from "theme/Global";
 import { AddItem } from "AddItem/AddItem";
 import { Table } from "Table/Table";
 import { AddCategory } from "AddCategory/AddCategory";
@@ -38,9 +39,10 @@ const App = () => {
       <ItemsCategoriesContext.Provider
         value={{ items, categories, setItems, setCategories }}
       >
+        <Global />
+        <AddCategory />
         <AddItem />
         <Table />
-        <AddCategory />
       </ItemsCategoriesContext.Provider>
     </Wrapper>
   );

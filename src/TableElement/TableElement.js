@@ -2,6 +2,7 @@ import React, { useContext, useState, forwardRef } from "react";
 import { ItemsCategoriesContext } from "App/App";
 import { Form } from "Form/Form";
 import { Entry } from "Entry/Entry";
+import { Button } from "Button/Button";
 
 export const TableElement = forwardRef(
   ({ name, description, price, category, id, index, ...props }, ref) => {
@@ -45,8 +46,8 @@ export const TableElement = forwardRef(
             category={category}
           />
         )}
-        <button onClick={() => deleteItem({ id })}>delete record</button>
-        <button onClick={() => editItem({ id })}>edit record</button>
+        <Button onClick={() => deleteItem({ id })}>usuń</Button>
+        <Button onClick={() => editItem({ id })}>edytuj</Button>
       </div>
     );
   }

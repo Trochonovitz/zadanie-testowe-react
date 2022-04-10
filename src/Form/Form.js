@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
 import { ItemsCategoriesContext } from "App/App";
-import { StyledForm } from "./Form.styles";
+import { Input } from "Input/Input";
+import { Label } from "Label/Label";
+import { Select } from "Select/Select";
+import { StyledButton, StyledForm } from "./Form.styles";
 
 export const Form = ({
   method,
@@ -66,29 +69,29 @@ export const Form = ({
 
   return (
     <StyledForm onSubmit={(event) => handleOnSubmit(event, index)}>
-      <label htmlFor="name">Nazwa</label>
-      <input
+      <Label htmlFor="name">Nazwa</Label>
+      <Input
         placeholder="Nazwa produktu"
         id="name"
         value={informations.name}
         onChange={(event) => handleInputValue(event)}
       />
-      <label htmlFor="description">Opis</label>
-      <input
+      <Label htmlFor="description">Opis</Label>
+      <Input
         placeholder="Opis produktu, dokładna specyfikacja"
         id="description"
         value={informations.description}
         onChange={(event) => handleInputValue(event)}
       />
-      <label htmlFor="price">Cena</label>
-      <input
+      <Label htmlFor="price">Cena</Label>
+      <Input
         placeholder="Cena"
         id="price"
         value={informations.price}
         onChange={(event) => handleInputValue(event)}
       />
-      <label htmlFor="category">Wybierz kategorię</label>
-      <select
+      <Label htmlFor="category">Wybierz kategorię</Label>
+      <Select
         id="category"
         defaultValue={selectState}
         onChange={(event) => handleInputValue(event)}
@@ -99,8 +102,10 @@ export const Form = ({
         {categories.map(({ category }, index) => (
           <option key={index}>{category}</option>
         ))}
-      </select>
-      <button type="submit">submit</button>
+      </Select>
+      <StyledButton type="submit">
+        {method === "POST" ? "dodaj nowy przedmiot" : "wprowadź modyfikacje"}
+      </StyledButton>
     </StyledForm>
   );
 };

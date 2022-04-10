@@ -1,5 +1,8 @@
 import React, { useContext, useState } from "react";
 import { ItemsCategoriesContext } from "App/App";
+import { Button } from "Button/Button";
+import { Wrapper } from "./AddCategory.styles";
+import { Input } from "Input/Input";
 
 export const AddCategory = () => {
   const [category, setCategory] = useState("");
@@ -26,19 +29,19 @@ export const AddCategory = () => {
   };
 
   return (
-    <>
-      <button onClick={() => setCategoryFlag(!addCategoryFlag)}>
+    <Wrapper>
+      <Button onClick={() => setCategoryFlag(!addCategoryFlag)}>
         dodaj kategorię
-      </button>
+      </Button>
       {addCategoryFlag && (
         <form onSubmit={(event) => handleOnSubmit(event)}>
-          <input
+          <Input
             onChange={(event) => setCategory(event.target.value)}
             placeholder="Dodaj kategorię"
           />
-          <button type="submit">submit</button>
+          <Button type="submit">submit</Button>
         </form>
       )}
-    </>
+    </Wrapper>
   );
 };
