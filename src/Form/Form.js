@@ -11,13 +11,15 @@ export const Form = ({
   setEditFlagStatus,
 }) => {
   const { items, categories, setItems } = useContext(ItemsCategoriesContext);
-  const [informations, setInformations] = useState({
-    id: "",
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-  });
+  const informationsState = {
+    id: method === "PATCH" ? items[index]?.id : "",
+    name: method === "PATCH" ? items[index]?.name : "",
+    description: method === "PATCH" ? items[index]?.description : "",
+    price: method === "PATCH" ? items[index]?.price : "",
+    category: method === "PATCH" ? items[index]?.category : "",
+  };
+  const [informations, setInformations] = useState(informationsState);
+  const selectState = method === "POST" ? "DEFAULT" : informations.category;
   const handleInputValue = (event) => {
     setInformations({
       ...informations,
@@ -88,11 +90,11 @@ export const Form = ({
       <label htmlFor="category">Wybierz kategorię</label>
       <select
         id="category"
-        defaultValue="DEFAULT"
+        defaultValue={selectState}
         onChange={(event) => handleInputValue(event)}
       >
-        <option disabled value="DEFAULT">
-          Wybierz kategorię!
+        <option disabled value={selectState}>
+          {method === "POST" ? "Wybierz kategorię!" : informations.category}
         </option>
         {categories.map(({ category }, index) => (
           <option key={index}>{category}</option>
