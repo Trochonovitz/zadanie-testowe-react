@@ -1,6 +1,6 @@
 # Web application build with React which allows to adding elements (and saving them on server written with Express.js: https://github.com/Trochonovitz/serwer-zadanie-testowe-react), deleted them, editing them and change order. You are allowed to filtering added items with categories' buttons and adding custom categories which also will be saved on server.
 
-## Preview: trochonovitz.github.io/zadanie-testowe-react
+## Preview: https://trochonovitz.github.io/zadanie-testowe-react
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
