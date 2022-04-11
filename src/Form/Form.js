@@ -34,7 +34,7 @@ export const Form = ({
     event.preventDefault();
     const urlID =
       method === "POST" ? `${Math.floor(Math.random() * 1000)}` : id;
-    const validURL = `http://localhost:3001/${url}/${
+    const validURL = `https://fast-beach-41104.herokuapp.com/${url}/${
       method === "PATCH" ? id : ""
     }`;
     const newItem = {

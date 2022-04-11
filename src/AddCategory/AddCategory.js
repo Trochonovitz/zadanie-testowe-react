@@ -15,7 +15,7 @@ export const AddCategory = () => {
       category,
     };
     try {
-      await fetch("http://localhost:3001/addCategory", {
+      await fetch("https://fast-beach-41104.herokuapp.com/addCategory", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

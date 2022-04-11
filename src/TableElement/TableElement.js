@@ -14,7 +14,7 @@ export const TableElement = forwardRef(
 
     const deleteItem = async ({ id }) => {
       try {
-        await fetch(`http://localhost:3001/delete/${id}`, {
+        await fetch(`https://fast-beach-41104.herokuapp.com/delete/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

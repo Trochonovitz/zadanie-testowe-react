@@ -47,7 +47,7 @@ export const Table = () => {
       destination.index
     );
     try {
-      await fetch("http://localhost:3001/reorganise", {
+      await fetch("https://fast-beach-41104.herokuapp.com/reorganise", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

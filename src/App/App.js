@@ -19,12 +19,14 @@ const App = () => {
   useEffect(() => {
     (async () => {
       try {
-        const fetchedItems = await fetch("http://localhost:3001/items");
+        const fetchedItems = await fetch(
+          "https://fast-beach-41104.herokuapp.com/items"
+        );
         const dataItems = await fetchedItems.json();
         setItems(dataItems);
 
         const fetchedCategories = await fetch(
-          "http://localhost:3001/categories"
+          "https://fast-beach-41104.herokuapp.com/categories"
         );
         const dataCategories = await fetchedCategories.json();
         setCategories(dataCategories);
