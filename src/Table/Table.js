@@ -1,20 +1,22 @@
 import React, { useContext, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useContent } from "hooks/useContent";
 import { ItemsCategoriesContext } from "App/App";
 import { TableElement } from "TableElement/TableElement";
 import { Title } from "Title/Title";
+import { CategoriesList } from "CategoriesList/CategoriesList";
+import { Subtitle } from "Subtitle/Subtitle";
 import {
   ButtonsWrapper,
   StyledButton,
   StyledTable,
   Wrapper,
 } from "./Table.styles";
-import { CategoriesList } from "CategoriesList/CategoriesList";
-import { Subtitle } from "Subtitle/Subtitle";
 
 export const Table = () => {
   const [activeCategory, setActiveCategory] = useState("wszystkie");
-  const { items, categories, setItems } = useContext(ItemsCategoriesContext);
+  const { items, categories } = useContext(ItemsCategoriesContext);
+  const { renderList } = useContent();
   const summary = items.reduce((acc, current) => acc + +current.price, 0);
   const filteredArray =
     activeCategory === "wszystkie"
@@ -31,6 +33,7 @@ export const Table = () => {
 
   const onDragEnd = async (result) => {
     const { destination, source } = result;
+
     if (!destination) {
       return;
     }
@@ -46,18 +49,8 @@ export const Table = () => {
       source.index,
       destination.index
     );
-    try {
-      await fetch("https://fast-beach-41104.herokuapp.com/reorganise", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reorganisedArray),
-      });
-      setItems([...reorganisedArray]);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await renderList("reorganise", reorganisedArray);
   };
   return (
     <Wrapper>

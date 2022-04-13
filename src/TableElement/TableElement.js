@@ -1,54 +1,46 @@
-import React, { useContext, useState, forwardRef } from "react";
-import { ItemsCategoriesContext } from "App/App";
+import React, { useState, forwardRef, createContext } from "react";
 import { Form } from "Form/Form";
 import { Entry } from "Entry/Entry";
 import { Button } from "Button/Button";
+import { useContent } from "hooks/useContent";
+
+export const EditUtilsContext = createContext({
+  editFlagStatus: false,
+  setEditFlagStatus: () => {},
+});
 
 export const TableElement = forwardRef(
   ({ name, description, price, category, id, index, ...props }, ref) => {
     const [editFlag, setEditFlag] = useState({ status: false, id: "" });
-    const { items, setItems } = useContext(ItemsCategoriesContext);
+    const { deleteItem } = useContent();
     const editItem = ({ id }) => {
       setEditFlag({ status: !editFlag.status, id });
     };
 
-    const deleteItem = async ({ id }) => {
-      try {
-        await fetch(`https://fast-beach-41104.herokuapp.com/delete/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: null,
-        });
-        setItems([...items.filter((item) => item.id !== id)]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     return (
-      <div ref={ref} {...props}>
-        {editFlag.status && editFlag.id === id ? (
-          <Form
-            url="edit"
-            method="PATCH"
-            editFlagStatus={editFlag.status}
-            setEditFlagStatus={setEditFlag}
-            id={id}
-            index={index}
-          />
-        ) : (
-          <Entry
-            name={name}
-            description={description}
-            price={price}
-            category={category}
-          />
-        )}
-        <Button onClick={() => deleteItem({ id })}>usuń</Button>
-        <Button onClick={() => editItem({ id })}>edytuj</Button>
-      </div>
+      <EditUtilsContext.Provider
+        value={{
+          editFlagStatus: editFlag.status,
+          setEditFlagStatus: setEditFlag,
+        }}
+      >
+        <div ref={ref} {...props}>
+          {editFlag.status && editFlag.id === id ? (
+            <Form url="edit" method="PATCH" id={id} index={index} />
+          ) : (
+            <Entry
+              name={name}
+              description={description}
+              price={price}
+              category={category}
+            />
+          )}
+          <Button onClick={async () => deleteItem("delete", { id })}>
+            usuń
+          </Button>
+          <Button onClick={() => editItem({ id })}>edytuj</Button>
+        </div>
+      </EditUtilsContext.Provider>
     );
   }
 );

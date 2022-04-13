@@ -1,42 +1,24 @@
-import React, { useContext, useState } from "react";
-import { ItemsCategoriesContext } from "App/App";
+import React, { useState } from "react";
+import { useContent } from "hooks/useContent";
 import { Button } from "Button/Button";
-import { Wrapper } from "./AddCategory.styles";
 import { Input } from "Input/Input";
+import { Wrapper } from "./AddCategory.styles";
 
 export const AddCategory = () => {
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState({ category: "" });
   const [addCategoryFlag, setCategoryFlag] = useState(false);
-  const { categories, setCategories } = useContext(ItemsCategoriesContext);
-
-  const handleOnSubmit = async (event) => {
-    event.preventDefault();
-    const newCategory = {
-      category,
-    };
-    try {
-      await fetch("https://fast-beach-41104.herokuapp.com/addCategory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCategory),
-      });
-      setCategories([newCategory, ...categories]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { addCategory } = useContent();
+  const handleCategoryValue = (event) =>
+    setCategory({ category: event.target.value });
+  const handleCategoryFlag = () => setCategoryFlag(!addCategoryFlag);
 
   return (
     <Wrapper>
-      <Button onClick={() => setCategoryFlag(!addCategoryFlag)}>
-        dodaj kategorię
-      </Button>
+      <Button onClick={handleCategoryFlag}>dodaj kategorię</Button>
       {addCategoryFlag && (
-        <form onSubmit={(event) => handleOnSubmit(event)}>
+        <form onSubmit={(event) => addCategory("addCategory", category, event)}>
           <Input
-            onChange={(event) => setCategory(event.target.value)}
+            onChange={(event) => handleCategoryValue(event)}
             placeholder="Dodaj kategorię"
           />
           <Button type="submit">submit</Button>

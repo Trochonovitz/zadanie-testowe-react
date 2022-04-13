@@ -4,68 +4,36 @@ import { Input } from "Input/Input";
 import { Label } from "Label/Label";
 import { Select } from "Select/Select";
 import { StyledButton, StyledForm } from "./Form.styles";
+import { useContent } from "hooks/useContent";
 
-export const Form = ({
-  method,
-  url,
-  id,
-  index,
-  editFlagStatus,
-  setEditFlagStatus,
-}) => {
-  const { items, categories, setItems } = useContext(ItemsCategoriesContext);
-  const informationsState = {
+export const Form = ({ method, id, index }) => {
+  const { items, categories } = useContext(ItemsCategoriesContext);
+  const { addItem, editItem } = useContent();
+  const [informations, setInformations] = useState({
     id: method === "PATCH" ? items[index]?.id : "",
     name: method === "PATCH" ? items[index]?.name : "",
     description: method === "PATCH" ? items[index]?.description : "",
     price: method === "PATCH" ? items[index]?.price : "",
     category: method === "PATCH" ? items[index]?.category : "",
-  };
-  const [informations, setInformations] = useState(informationsState);
+  });
   const selectState = method === "POST" ? "DEFAULT" : informations.category;
+  const newItem = {
+    id: method === "POST" ? `${Math.floor(Math.random() * 1000)}` : id,
+    name: informations.name,
+    description: informations.description,
+    price: informations.price,
+    category: informations.category,
+  };
   const handleInputValue = (event) => {
     setInformations({
       ...informations,
       [event.target.id]: event.target.value,
     });
   };
-
-  const handleOnSubmit = async (event, index) => {
-    event.preventDefault();
-    const urlID =
-      method === "POST" ? `${Math.floor(Math.random() * 1000)}` : id;
-    const validURL = `https://fast-beach-41104.herokuapp.com/${url}/${
-      method === "PATCH" ? id : ""
-    }`;
-    const newItem = {
-      id: urlID,
-      name: informations.name,
-      description: informations.description,
-      price: informations.price,
-      category: informations.category,
-    };
-
-    try {
-      await fetch(validURL, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newItem),
-      });
-
-      if (method === "PATCH") {
-        let updatedArray = [...items];
-        updatedArray[index] = newItem;
-        setItems(updatedArray);
-        setEditFlagStatus(!editFlagStatus);
-      } else {
-        setItems([newItem, ...items]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const handleOnSubmit = (event, index) =>
+    method === "POST"
+      ? addItem("addItem", newItem, event)
+      : editItem("edit", newItem, event, index, id);
 
   return (
     <StyledForm onSubmit={(event) => handleOnSubmit(event, index)}>
